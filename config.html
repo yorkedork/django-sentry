@@ -7,13 +7,13 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Configuration &mdash; Sentry v1.3.14 (f3ccb6a5fd7f0867006c766c8a2cb7b8d543b517) documentation</title>
+    <title>Configuration &mdash; Sentry v1.3.14 (95e3b84ca42b6be91b6e8eabaa741023944eb904) documentation</title>
     <link rel="stylesheet" href="static/default.css" type="text/css" />
     <link rel="stylesheet" href="static/pygments.css" type="text/css" />
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '',
-        VERSION:     '1.3.14 (f3ccb6a5fd7f0867006c766c8a2cb7b8d543b517)',
+        VERSION:     '1.3.14 (95e3b84ca42b6be91b6e8eabaa741023944eb904)',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -22,7 +22,7 @@
     <script type="text/javascript" src="static/jquery.js"></script>
     <script type="text/javascript" src="static/underscore.js"></script>
     <script type="text/javascript" src="static/doctools.js"></script>
-    <link rel="top" title="Sentry v1.3.14 (f3ccb6a5fd7f0867006c766c8a2cb7b8d543b517) documentation" href="index.html" />
+    <link rel="top" title="Sentry v1.3.14 (95e3b84ca42b6be91b6e8eabaa741023944eb904) documentation" href="index.html" />
     <link rel="next" title="Extending Sentry" href="extensions.html" />
     <link rel="prev" title="Install" href="install.html" /> 
   </head>
@@ -39,7 +39,7 @@
         <li class="right" >
           <a href="install.html" title="Install"
              accesskey="P">previous</a> |</li>
-        <li><a href="index.html">Sentry v1.3.14 (f3ccb6a5fd7f0867006c766c8a2cb7b8d543b517) documentation</a> &raquo;</li> 
+        <li><a href="index.html">Sentry v1.3.14 (95e3b84ca42b6be91b6e8eabaa741023944eb904) documentation</a> &raquo;</li> 
       </ul>
     </div>  
 
@@ -89,12 +89,15 @@ SENTRY_KEY = '0123456789abcde'</pre>
 <div class="highlight-python"><div class="highlight"><pre><span class="kn">import</span> <span class="nn">logging</span>
 <span class="kn">from</span> <span class="nn">sentry.client.handlers</span> <span class="kn">import</span> <span class="n">SentryHandler</span>
 
-<span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">()</span><span class="o">.</span><span class="n">addHandler</span><span class="p">(</span><span class="n">SentryHandler</span><span class="p">())</span>
+<span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">()</span>
+<span class="c"># ensure we havent already registered the handler</span>
+<span class="k">if</span> <span class="n">SentryHandler</span> <span class="ow">not</span> <span class="ow">in</span> <span class="nb">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="o">.</span><span class="n">__class__</span><span class="p">,</span> <span class="n">logger</span><span class="o">.</span><span class="n">handlers</span><span class="p">):</span>
+    <span class="n">logger</span><span class="o">.</span><span class="n">addHandler</span><span class="p">(</span><span class="n">SentryHandler</span><span class="p">())</span>
 
-<span class="c"># Add StreamHandler to sentry&#39;s default so you can catch missed exceptions</span>
-<span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="s">&#39;sentry.errors&#39;</span><span class="p">)</span>
-<span class="n">logger</span><span class="o">.</span><span class="n">propagate</span> <span class="o">=</span> <span class="bp">False</span>
-<span class="n">logger</span><span class="o">.</span><span class="n">addHandler</span><span class="p">(</span><span class="n">logging</span><span class="o">.</span><span class="n">StreamHandler</span><span class="p">())</span>
+    <span class="c"># Add StreamHandler to sentry&#39;s default so you can catch missed exceptions</span>
+    <span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="s">&#39;sentry.errors&#39;</span><span class="p">)</span>
+    <span class="n">logger</span><span class="o">.</span><span class="n">propagate</span> <span class="o">=</span> <span class="bp">False</span>
+    <span class="n">logger</span><span class="o">.</span><span class="n">addHandler</span><span class="p">(</span><span class="n">logging</span><span class="o">.</span><span class="n">StreamHandler</span><span class="p">())</span>
 </pre></div>
 </div>
 <p>You can also use the <tt class="docutils literal"><span class="pre">exc_info</span></tt> and <tt class="docutils literal"><span class="pre">extra=dict(url=foo)</span></tt> arguments on your <tt class="docutils literal"><span class="pre">log</span></tt> methods. This will store the appropriate information and allow django-sentry to render it based on that information:</p>
@@ -246,7 +249,7 @@ seen after it has been resolved.</p>
         <li class="right" >
           <a href="install.html" title="Install"
              >previous</a> |</li>
-        <li><a href="index.html">Sentry v1.3.14 (f3ccb6a5fd7f0867006c766c8a2cb7b8d543b517) documentation</a> &raquo;</li> 
+        <li><a href="index.html">Sentry v1.3.14 (95e3b84ca42b6be91b6e8eabaa741023944eb904) documentation</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">
