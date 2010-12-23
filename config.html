@@ -7,13 +7,13 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Configuration &mdash; Sentry v1.4.0 documentation</title>
+    <title>Configuration &mdash; Sentry v1.5.3 documentation</title>
     <link rel="stylesheet" href="static/default.css" type="text/css" />
     <link rel="stylesheet" href="static/pygments.css" type="text/css" />
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '',
-        VERSION:     '1.4.0',
+        VERSION:     '1.5.3',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -22,7 +22,7 @@
     <script type="text/javascript" src="static/jquery.js"></script>
     <script type="text/javascript" src="static/underscore.js"></script>
     <script type="text/javascript" src="static/doctools.js"></script>
-    <link rel="top" title="Sentry v1.4.0 documentation" href="index.html" />
+    <link rel="top" title="Sentry v1.5.3 documentation" href="index.html" />
     <link rel="next" title="Extending Sentry" href="extensions.html" />
     <link rel="prev" title="Install" href="install.html" /> 
   </head>
@@ -39,7 +39,7 @@
         <li class="right" >
           <a href="install.html" title="Install"
              accesskey="P">previous</a> |</li>
-        <li><a href="index.html">Sentry v1.4.0 documentation</a> &raquo;</li> 
+        <li><a href="index.html">Sentry v1.5.3 documentation</a> &raquo;</li> 
       </ul>
     </div>  
 
@@ -130,6 +130,31 @@ be seen as the same message within Sentry:</p>
 </pre></div>
 </div>
 </div>
+<div class="section" id="integration-with-haystack-search">
+<h2>Integration with <tt class="docutils literal"><span class="pre">haystack</span></tt> (Search)<a class="headerlink" href="#integration-with-haystack-search" title="Permalink to this headline">¶</a></h2>
+<p>(This support is still under development)</p>
+<p>Note: You will to install a forked version of Haystack which supports additional configuration. It can be obtained on [GitHub](<a class="reference external" href="http://github.com/disqus/django-haystack">http://github.com/disqus/django-haystack</a>).</p>
+<p>Start by configuring your Sentry search backend:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="c"># By default Sentry looks for HAYSTACK_* options</span>
+<span class="n">SENTRY_SEARCH_BACKEND</span> <span class="o">=</span> <span class="s">&#39;solr&#39;</span>
+<span class="n">SENTRY_SEARCH_OPTIONS</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s">&#39;url&#39;</span><span class="p">:</span> <span class="s">&#39;http://127.0.0.1:8983/solr&#39;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>Or if you want to use Whoosh (you shouldn&#8217;t):</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">SENTRY_SEARCH_BACKEND</span> <span class="o">=</span> <span class="s">&#39;whoosh&#39;</span>
+<span class="n">SENTRY_SEARCH_OPTIONS</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s">&#39;path&#39;</span><span class="p">:</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">PROJECT_ROOT</span><span class="p">,</span> <span class="s">&#39;sentry_index&#39;</span><span class="p">)</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>Now ensure you&#8217;ve added <tt class="docutils literal"><span class="pre">haystack</span></tt> to the <tt class="docutils literal"><span class="pre">INSTALLED_APPS</span></tt> on Sentry&#8217;s server:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">INSTALLED_APPS</span> <span class="o">=</span> <span class="n">INSTALLED_APPS</span> <span class="o">+</span> <span class="p">(</span><span class="s">&#39;haystack&#39;</span><span class="p">,)</span>
+</pre></div>
+</div>
+<p>Enjoy!</p>
+</div>
 <div class="section" id="other-settings">
 <h2>Other Settings<a class="headerlink" href="#other-settings" title="Permalink to this headline">¶</a></h2>
 <p>Several options exist to configure django-sentry via your <tt class="docutils literal"><span class="pre">settings.py</span></tt>:</p>
@@ -194,6 +219,7 @@ seen after it has been resolved.</p>
 <li><a class="reference internal" href="#">Configuration</a><ul>
 <li><a class="reference internal" href="#multi-server-configuration">Multi-server configuration</a></li>
 <li><a class="reference internal" href="#integration-with-logging">Integration with <tt class="docutils literal"><span class="pre">logging</span></tt></a></li>
+<li><a class="reference internal" href="#integration-with-haystack-search">Integration with <tt class="docutils literal"><span class="pre">haystack</span></tt> (Search)</a></li>
 <li><a class="reference internal" href="#other-settings">Other Settings</a><ul>
 <li><a class="reference internal" href="#sentry-client">SENTRY_CLIENT</a><ul>
 <li><a class="reference internal" href="#loggingsentryclient">LoggingSentryClient</a></li>
@@ -249,12 +275,12 @@ seen after it has been resolved.</p>
         <li class="right" >
           <a href="install.html" title="Install"
              >previous</a> |</li>
-        <li><a href="index.html">Sentry v1.4.0 documentation</a> &raquo;</li> 
+        <li><a href="index.html">Sentry v1.5.3 documentation</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">
         &copy; Copyright 2010, David Cramer.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.4.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.5.
     </div>
   </body>
 </html>
