@@ -133,10 +133,9 @@ be seen as the same message within Sentry:</p>
 <div class="section" id="integration-with-haystack-search">
 <h2>Integration with <tt class="docutils literal"><span class="pre">haystack</span></tt> (Search)<a class="headerlink" href="#integration-with-haystack-search" title="Permalink to this headline">¶</a></h2>
 <p>(This support is still under development)</p>
-<p>Note: You will to install a forked version of Haystack which supports additional configuration. It can be obtained on [GitHub](<a class="reference external" href="http://github.com/disqus/django-haystack">http://github.com/disqus/django-haystack</a>).</p>
+<p>Note: You will need to install a forked version of Haystack which supports additional configuration. It can be obtained on [GitHub](<a class="reference external" href="http://github.com/disqus/django-haystack">http://github.com/disqus/django-haystack</a>).</p>
 <p>Start by configuring your Sentry search backend:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="c"># By default Sentry looks for HAYSTACK_* options</span>
-<span class="n">SENTRY_SEARCH_BACKEND</span> <span class="o">=</span> <span class="s">&#39;solr&#39;</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">SENTRY_SEARCH_BACKEND</span> <span class="o">=</span> <span class="s">&#39;solr&#39;</span>
 <span class="n">SENTRY_SEARCH_OPTIONS</span> <span class="o">=</span> <span class="p">{</span>
     <span class="s">&#39;url&#39;</span><span class="p">:</span> <span class="s">&#39;http://127.0.0.1:8983/solr&#39;</span>
 <span class="p">}</span>
