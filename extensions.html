@@ -7,13 +7,13 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Extending Sentry &mdash; Sentry v1.5.3 documentation</title>
+    <title>Extending Sentry &mdash; Sentry v1.6.0 documentation</title>
     <link rel="stylesheet" href="static/default.css" type="text/css" />
     <link rel="stylesheet" href="static/pygments.css" type="text/css" />
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '',
-        VERSION:     '1.5.3',
+        VERSION:     '1.6.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -22,7 +22,7 @@
     <script type="text/javascript" src="static/jquery.js"></script>
     <script type="text/javascript" src="static/underscore.js"></script>
     <script type="text/javascript" src="static/doctools.js"></script>
-    <link rel="top" title="Sentry v1.5.3 documentation" href="index.html" />
+    <link rel="top" title="Sentry v1.6.0 documentation" href="index.html" />
     <link rel="prev" title="Configuration" href="config.html" /> 
   </head>
   <body>
@@ -35,7 +35,7 @@
         <li class="right" >
           <a href="config.html" title="Configuration"
              accesskey="P">previous</a> |</li>
-        <li><a href="index.html">Sentry v1.5.3 documentation</a> &raquo;</li> 
+        <li><a href="index.html">Sentry v1.6.0 documentation</a> &raquo;</li> 
       </ul>
     </div>  
 
@@ -112,18 +112,18 @@ as a dedicated panel to view all sites a message has been seen on.</p>
 </pre></div>
 </div>
 <p>You can also record errors outside of handler if you want:</p>
-<div class="highlight-python"><pre>from sentry.client.base import SentryClient
+<div class="highlight-python"><pre>from sentry.client.models import client
 
 try:
-        ...
+    ...
 except Exception, exc:
-        SentryClient().create_from_exception([exc_info=None, url=None, view=None])</pre>
+    message_id = client.create_from_exception([exc_info=None, url=None, view=None])</pre>
 </div>
 <p>If you wish to log normal messages (useful for non-<tt class="docutils literal"><span class="pre">logging</span></tt> integration):</p>
-<div class="highlight-python"><pre>from sentry.client.base import SentryClient
+<div class="highlight-python"><pre>from sentry.client.models import client
 import logging
 
-SentryClient().create_from_text('Message Message'[, level=logging.WARNING, url=None])</pre>
+message_id = client.create_from_text('Message Message'[, level=logging.WARNING, url=None])</pre>
 </div>
 <p>Both the <tt class="docutils literal"><span class="pre">url</span></tt> and <tt class="docutils literal"><span class="pre">level</span></tt> parameters are optional. <tt class="docutils literal"><span class="pre">level</span></tt> should be one of the following:</p>
 <ul class="simple">
@@ -194,7 +194,7 @@ the error.</p>
         <li class="right" >
           <a href="config.html" title="Configuration"
              >previous</a> |</li>
-        <li><a href="index.html">Sentry v1.5.3 documentation</a> &raquo;</li> 
+        <li><a href="index.html">Sentry v1.6.0 documentation</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">

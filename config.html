@@ -7,13 +7,13 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Configuration &mdash; Sentry v1.5.3 documentation</title>
+    <title>Configuration &mdash; Sentry v1.6.0 documentation</title>
     <link rel="stylesheet" href="static/default.css" type="text/css" />
     <link rel="stylesheet" href="static/pygments.css" type="text/css" />
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '',
-        VERSION:     '1.5.3',
+        VERSION:     '1.6.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -22,7 +22,7 @@
     <script type="text/javascript" src="static/jquery.js"></script>
     <script type="text/javascript" src="static/underscore.js"></script>
     <script type="text/javascript" src="static/doctools.js"></script>
-    <link rel="top" title="Sentry v1.5.3 documentation" href="index.html" />
+    <link rel="top" title="Sentry v1.6.0 documentation" href="index.html" />
     <link rel="next" title="Extending Sentry" href="extensions.html" />
     <link rel="prev" title="Install" href="install.html" /> 
   </head>
@@ -39,7 +39,7 @@
         <li class="right" >
           <a href="install.html" title="Install"
              accesskey="P">previous</a> |</li>
-        <li><a href="index.html">Sentry v1.5.3 documentation</a> &raquo;</li> 
+        <li><a href="index.html">Sentry v1.6.0 documentation</a> &raquo;</li> 
       </ul>
     </div>  
 
@@ -154,6 +154,57 @@ be seen as the same message within Sentry:</p>
 </div>
 <p>Enjoy!</p>
 </div>
+<div class="section" id="logging">
+<h2>404 Logging<a class="headerlink" href="#logging" title="Permalink to this headline">¶</a></h2>
+<p class="versionadded">
+<span class="versionmodified">New in version 1.6.0.</span></p>
+<p>In certain conditions you may wish to log 404 events to the Sentry server. To do this, you simply need to enable a Django middleware:</p>
+<div class="highlight-python"><pre>MIDDLEWARE_CLASSES = MIDDLEWARE_CLASSES + (
+  ...,
+  'sentry.client.middleware.Sentry404CatchMiddleware',
+)</pre>
+</div>
+</div>
+<div class="section" id="message-references">
+<h2>Message References<a class="headerlink" href="#message-references" title="Permalink to this headline">¶</a></h2>
+<p class="versionadded">
+<span class="versionmodified">New in version 1.6.0.</span></p>
+<p>Sentry supports sending a message ID to your clients so that they can be tracked easily by your development team. There are two ways to access this information, the first is via the <tt class="docutils literal"><span class="pre">X-Sentry-ID</span></tt> HTTP response header. Adding this is as simple as appending a middleware to your stack:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">MIDDLEWARE_CLASSES</span> <span class="o">=</span> <span class="n">MIDDLEWARE_CLASSES</span> <span class="o">+</span> <span class="p">(</span>
+  <span class="c"># We recommend putting this as high in the chain as possible</span>
+  <span class="s">&#39;sentry.client.middleware.SentryResponseErrorIdMiddleware&#39;</span><span class="p">,</span>
+  <span class="o">...</span><span class="p">,</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<p>Another alternative method is rendering it within a template. By default, Sentry will attach request.sentry when it catches a Django exception. In our example, we will use this information to modify the default 500.html which is rendered, and show the user a case reference ID. The first step in doing this is creating a custom <tt class="docutils literal"><span class="pre">handler500</span></tt> in your <tt class="docutils literal"><span class="pre">urls.py</span></tt> file:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">django.conf.urls.defaults</span> <span class="kn">import</span> <span class="o">*</span>
+
+<span class="kn">from</span> <span class="nn">django.views.defaults</span> <span class="kn">import</span> <span class="n">page_not_found</span><span class="p">,</span> <span class="n">server_error</span>
+
+<span class="k">def</span> <span class="nf">handler500</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    500 error handler which includes ``request`` in the context.</span>
+
+<span class="sd">    Templates: `500.html`</span>
+<span class="sd">    Context: None</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="kn">from</span> <span class="nn">django.template</span> <span class="kn">import</span> <span class="n">Context</span><span class="p">,</span> <span class="n">loader</span>
+    <span class="kn">from</span> <span class="nn">django.http</span> <span class="kn">import</span> <span class="n">HttpResponseServerError</span>
+
+    <span class="n">t</span> <span class="o">=</span> <span class="n">loader</span><span class="o">.</span><span class="n">get_template</span><span class="p">(</span><span class="s">&#39;500.html&#39;</span><span class="p">)</span> <span class="c"># You need to create a 500.html template.</span>
+    <span class="k">return</span> <span class="n">HttpResponseServerError</span><span class="p">(</span><span class="n">t</span><span class="o">.</span><span class="n">render</span><span class="p">(</span><span class="n">Context</span><span class="p">({</span>
+        <span class="s">&#39;request&#39;</span><span class="p">:</span> <span class="n">request</span><span class="p">,</span>
+    <span class="p">})))</span>
+</pre></div>
+</div>
+<p>Once we&#8217;ve successfully added the request context variable, adding the Sentry reference ID to our 500.html is simple:</p>
+<div class="highlight-python"><pre>&lt;p&gt;You've encountered an error, oh noes!&lt;/p&gt;
+{% if request.sentry.id %}
+    &lt;p&gt;If you need assistance, you may reference this error as &lt;strong&gt;{{ request.sentry.id }}&lt;/strong&gt;.&lt;/p&gt;
+{% endif %}</pre>
+</div>
+</div>
 <div class="section" id="other-settings">
 <h2>Other Settings<a class="headerlink" href="#other-settings" title="Permalink to this headline">¶</a></h2>
 <p>Several options exist to configure django-sentry via your <tt class="docutils literal"><span class="pre">settings.py</span></tt>:</p>
@@ -219,6 +270,8 @@ seen after it has been resolved.</p>
 <li><a class="reference internal" href="#multi-server-configuration">Multi-server configuration</a></li>
 <li><a class="reference internal" href="#integration-with-logging">Integration with <tt class="docutils literal"><span class="pre">logging</span></tt></a></li>
 <li><a class="reference internal" href="#integration-with-haystack-search">Integration with <tt class="docutils literal"><span class="pre">haystack</span></tt> (Search)</a></li>
+<li><a class="reference internal" href="#logging">404 Logging</a></li>
+<li><a class="reference internal" href="#message-references">Message References</a></li>
 <li><a class="reference internal" href="#other-settings">Other Settings</a><ul>
 <li><a class="reference internal" href="#sentry-client">SENTRY_CLIENT</a><ul>
 <li><a class="reference internal" href="#loggingsentryclient">LoggingSentryClient</a></li>
@@ -274,7 +327,7 @@ seen after it has been resolved.</p>
         <li class="right" >
           <a href="install.html" title="Install"
              >previous</a> |</li>
-        <li><a href="index.html">Sentry v1.5.3 documentation</a> &raquo;</li> 
+        <li><a href="index.html">Sentry v1.6.0 documentation</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">
