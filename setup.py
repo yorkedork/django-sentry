@@ -129,6 +129,7 @@ setup(
         'django-paging>=0.2.2',
         'django-indexer==0.2.1',
         'uuid',
+        'django-staticfiles',
     ],
     test_suite = 'sentry.tests',
     include_package_data=True,
