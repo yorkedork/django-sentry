@@ -125,13 +125,13 @@ setup(
     package_data=find_package_data('sentry',only_in_packages=False),
     zip_safe=False,
     install_requires=[
-        'django',
+        'django-staticfiles',
         'django-paging>=0.2.2',
         'django-indexer==0.2.1',
         'uuid',
-        'django-staticfiles',
     ],
     test_suite = 'sentry.tests',
+    tests_require=["Django"],
     include_package_data=True,
     cmdclass={"test": mytest},
     classifiers=[
