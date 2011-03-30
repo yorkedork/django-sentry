@@ -1,5 +1,8 @@
 {% load paging_extras %}
 {% load sentry_helpers %}
+{% load static %}
+{% get_static_prefix as STATIC_PREFIX %}
+
 
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd"> 
 <html lang="en">
@@ -7,18 +10,18 @@
         <meta http-equiv="content-type" content="text/html; charset=utf-8"> 
         <meta name="robots" content="NONE,NOARCHIVE">
         <link href="http{% if request.is_secure %}s{% endif %}://fonts.googleapis.com/css?family=Yanone+Kaffeesatz:light,regular&amp;subset=latin" rel="stylesheet" type="text/css">
-        <link href="{% url sentry-media "styles/global.css" %}" rel="stylesheet" type="text/css"/>
-        <link href="{% url sentry-media "images/sentry.png" %}" rel="shortcut icon"/>
+        <link href="{{ STATIC_PREFIX }}styles/global.css" rel="stylesheet" type="text/css"/>
+        <link href="{{ STATIC_PREFIX }}images/sentry.png" rel="shortcut icon"/>
         <title>{% block title %}Sentry{% endblock %}</title> 
         <script type="text/javascript" src="http{% if request.is_secure %}s{% endif %}://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script>
-        <script type="text/javascript" src="{% url sentry-media "scripts/highcharts.js" %}" ></script>
-        <script type="text/javascript" src="{% url sentry-media "scripts/jquery.animate-colors-min.js" %}"></script>
-        <script type="text/javascript" src="{% url sentry-media "scripts/global.js" %}"></script>
+        <script type="text/javascript" src="{{ STATIC_PREFIX }}scripts/highcharts.js"></script>
+        <script type="text/javascript" src="{{ STATIC_PREFIX }}scripts/jquery.animate-colors-min.js"></script>
+        <script type="text/javascript" src="{{ STATIC_PREFIX }}scripts/global.js"></script>
         <script type="text/javascript">
         Sentry.config({
-            mediaUrl: '{% url sentry-media '' %}',
+            mediaUrl: '{{ STATIC_PREFIX }}',
             apiUrl: '{% url sentry-ajax %}',
-            defaultImage: '{% url sentry-media 'images/sentry.png' %}'
+            defaultImage: '{{ STATIC_PREFIX }}images/sentry.png'
         });
         {% if has_realtime %}
         Sentry.realtime.enable();
@@ -30,7 +33,7 @@
         {% block body %}
         <div id="header"> 
             <div class="container">
-                <h1><a href="{% url sentry %}"><img src="{% url sentry-media "images/sentry.png" %}" border="0" width="32"/>Sentry</a></h1>
+                <h1><a href="{% url sentry %}"><img src="{{ STATIC_PREFIX }}images/sentry.png" %}" border="0" width="32"/>Sentry</a></h1>
                 <h2>{% block heading %}Dashboard{% endblock %}</h2>
                 {% block search %}
                     <form id="search" method="GET" action="{% url sentry-search %}">
