@@ -14,17 +14,20 @@ from sentry import conf
 _FILTER_CACHE = None
 def get_filters():
     global _FILTER_CACHE
-    
+
     if _FILTER_CACHE is None:
         
         filters = []
         for filter_ in conf.FILTERS:
+            if filter_.endswith('sentry.filters.SearchFilter'):
+                continue
             module_name, class_name = filter_.rsplit('.', 1)
             try:
                 module = __import__(module_name, {}, {}, class_name)
                 filter_ = getattr(module, class_name)
             except Exception:
-                logging.exception('Unable to import %s' % (filter_,))
+                logger = logging.getLogger('sentry.errors')
+                logger.exception('Unable to import %s' % (filter_,))
                 continue
             filters.append(filter_)
         _FILTER_CACHE = filters
@@ -76,7 +79,7 @@ def transform(value):
             return str(value)
         except:
             return to_unicode(value)
-    elif hasattr(value, '__sentry__'):
+    elif callable(getattr(value, '__sentry__', None)):
         return value.__sentry__()
     elif not isinstance(value, (int, bool)) and value is not None:
         # XXX: we could do transform(repr(value)) here
